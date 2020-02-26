@@ -7,6 +7,6 @@ script:
 
 deploy:
   - provider: releases
-    api_key: "$TRAVIS_TOKEN"
+    api_key: "$GITHUB_TOKEN"
     file: "reindex_dist/database.json"
     skip_cleanup: true
