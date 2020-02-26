@@ -10,5 +10,3 @@ deploy:
     api_key: "$TRAVIS_TOKEN"
     file: "reindex_dist/database.json"
     skip_cleanup: true
-    on:
-      tags: true
