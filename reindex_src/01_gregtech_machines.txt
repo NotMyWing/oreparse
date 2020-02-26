@@ -1,0 +1,31 @@
+// MACHINEDEF centrifuge
+PRETTYNAME Centrifuge
+WHITELIST ^dust.*
+// ENDMACHINEDEF centrifuge
+
+// MACHINEDEF macerator
+PRETTYNAME Macerator
+WHITELIST ^ore.*
+WHITELIST ^crushed.*
+// ENDMACHINEDEF macerator
+
+// MACHINEDEF orewasher
+PRETTYNAME Ore Washer
+// ENDMACHINEDEF orewasher
+
+// MACHINEDEF thermal_centrifuge
+PRETTYNAME Thermal Centrifuge
+WHITELIST ^crushed.*
+// ENDMACHINEDEF thermal_centrifuge
+
+// MACHINEDEF electrolyzer
+PRETTYNAME Electrolyzer
+// ENDMACHINEDEF electrolyzer
+
+// MACHINEDEF chemical_bath
+PRETTYNAME Chemical Bath
+// ENDMACHINEDEF chemical_bath
+
+// MACHINEDEF chemical_reactor
+PRETTYNAME Chemical Reactor
+// ENDMACHINEDEF chemical_reactor
