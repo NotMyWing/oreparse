@@ -47,6 +47,11 @@ export const OreFilter = {
 		, /Blitz/ig
 		, /EnderEye/ig
 		, /EnderPearl/ig
+		, yeetDust("GraniteRed")
+		, yeetDust("Marble")
+		, yeetDust("Granite")
+		, yeetDust("TinySiliconDioxide")
+		, yeetDust("TinyFlint")
 	]
 
 	, oreDictionaryReplacements: new Map([
