@@ -1,0 +1,125 @@
+// BEGIN small_microverse_projector
+IN shipTierOne
+OUT denseOreIron
+OUT oreCassiterite
+OUT oreRedstone
+OUT oreNickel
+OUT oreRutile
+OUT oreUraninite
+OUT oreGalena
+OUT oreDilithium
+EUT 500
+---
+IN shipTierOne
+OUT gemExquisiteDiamond
+OUT orePhosphor
+OUT oreApatite
+EUT 500
+---
+IN shipTierTwo
+OUT oreBauxite
+OUT oreCopper
+OUT oreScheelite
+OUT oreTungstate
+OUT oreCassiterite
+OUT dustRadium
+EUT 1000
+---
+IN shipTierThree
+OUT gemExquisiteDiamond
+OUT gemExquisiteEmerald
+OUT gemExquisiteRuby
+OUT oreGold
+OUT oreSilver
+EUT 2000
+---
+IN shipTierThree
+OUT oreScheelite
+OUT oreTungstate
+OUT oreRutile
+OUT oreCopper
+OUT oreTetrahedrite
+OUT oreCassiterite
+OUT oreTin
+OUT oreRedstone
+OUT oreCertusQuartz
+EUT 2000
+---
+IN shipTierFour
+OUT oreOilsands
+EUT 3750
+---
+IN shipTierFour
+OUT denseOreLapis
+OUT denseOreDiamond
+OUT denseOreCoal
+OUT denseOreEmerald
+OUT denseOreRedstone
+EUT 3750
+---
+// FINISH small_microverse_projector
+
+// BEGIN medium_microverse_projector
+IN shipTierFour
+OUT oreIridium
+OUT oreOsmium
+EUT 3750
+---
+IN shipTierFive
+OUT oreUranium
+OUT orePalladium
+OUT oreTennantite
+OUT oreBastnasite
+OUT oreSphalerite
+OUT oreMonazite
+OUT oreOsmium
+OUT oreMolybdenite
+OUT oreBeryllium
+EUT 7500
+---
+IN shipTierFive
+OUT dustNaquadah
+EUT 7500
+---
+IN shipTierSix
+OUT oreUranium
+OUT oreOsmium
+OUT oreIridium
+EUT 18750
+---
+// FINISH medium_microverse_projector
+
+// BEGIN chemical_reactor
+IN denseOreIron
+OUT oreIron
+EUT 500
+--
+IN denseOreDiamond
+OUT oreDiamond
+EUT 500
+--
+IN denseOreRedstone
+OUT oreRedstone
+EUT 500
+--
+IN denseOreEmerald
+OUT oreEmerald
+EUT 500
+--
+IN denseOreCoal
+OUT oreCoal
+EUT 500
+--
+IN denseOreLapis
+OUT oreLapis
+EUT 500
+--
+IN denseOreGold
+OUT oreGold
+EUT 500
+--
+IN denseOreOilsands
+OUT oreOilsands
+EUT 500
+--
+// FINISH chemical_reactor

@@ -29,3 +29,7 @@ PRETTYNAME Chemical Bath
 // MACHINEDEF chemical_reactor
 PRETTYNAME Chemical Reactor
 // ENDMACHINEDEF chemical_reactor
+
+// MACHINEDEF packager
+PRETTYNAME Packager
+// ENDMACHINEDEF packager

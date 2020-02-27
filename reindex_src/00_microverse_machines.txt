@@ -1,11 +1,11 @@
-// MACHINEDEF small_microverse
+// MACHINEDEF small_microverse_projector
 PRETTYNAME Small Microverse Projector
-// ENDMACHINEDEF small_microverse
+// ENDMACHINEDEF small_microverse_projector
 
-// MACHINEDEF medium_microverse
+// MACHINEDEF medium_microverse_projector
 PRETTYNAME Medium Microverse Projector
 // ENDMACHINEDEF medium_microverse
 
-// MACHINEDEF large_microverse
+// MACHINEDEF medium_microverse_projector
 PRETTYNAME Large Microverse Projector
 // ENDMACHINEDEF large_microverse

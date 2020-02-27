@@ -8,6 +8,7 @@ import { RecipeDefReader } from "./RecipeDefReader"
 import { ReindexConfig } from "../config"
 
 const REG_CRAFTTWEAKER_BULLSHIT = new RegExp(`^${"\\[[^\\]]+\\]".repeat(3)}`)
+const REG_SMALLTINY_DUST = /^dustTiny(.+)|dustSmall(.+)$/
 
 export const reindex = async (): Promise<RecipeDatabase> => {
 	const output: RecipeDatabase = {
@@ -84,13 +85,61 @@ export const reindex = async (): Promise<RecipeDatabase> => {
 		}
 	}
 
+	// Step Two: Auto-Generate Packager Recipes for Tiny and Small Piles
+	Object.keys(output.recipeDefs).forEach(smallTinyDustKey => {
+		const match = REG_SMALLTINY_DUST.exec(smallTinyDustKey)
+		if (match) {
+			const regularDustName = `dust${match[1] || match[2]}`
+			const regularDustDef = output.recipeDefs[regularDustName]
 
-	// Step Two: Prune items that cannot be produced.
+			if (regularDustDef) {
+				if (!regularDustDef.producedBy) {
+					regularDustDef.producedBy = {}
+				}
+				regularDustDef.producedBy[smallTinyDustKey] = {
+					machine: "packager"
+					, EUt: 12
+				}
+			
+				const smallTinyDustDef = output.recipeDefs[smallTinyDustKey]
+
+				if (!smallTinyDustDef.products) {
+					smallTinyDustDef.products = {}
+				}
+				smallTinyDustDef.products[regularDustName] = {
+					machine: "packager"
+					, EUt: 12
+				}
+
+				console.debug(`Generating Packager recipe for ${smallTinyDustKey}`)
+			}			
+		}
+	})
+
+	// Step Three: Prune items that cannot be produced.
+	// Trust me, it's not that expensive.
 	Object.keys(output.recipeDefs).forEach(key => {
 		const def = output.recipeDefs[key]
 
-		if (!def.producedBy && !def.major) {
-			console.debug(`Pruning ${def.prettyName || key} (dead-end)`)
+		if (def && (!def.producedBy || Object.keys(def.producedBy).length == 0) && !def.major) {
+			const toPrune = [key]
+
+			Object.keys(output.recipeDefs).forEach(otherKey => {
+				const otherDef = output.recipeDefs[otherKey]
+				if (otherDef.producedBy && otherDef.producedBy[key]) {
+					delete otherDef.producedBy[key]
+
+					if (Object.keys(otherDef.producedBy).length == 0) {
+						toPrune.push(otherKey)
+					}
+				}
+			})
+
+			toPrune.forEach(key => {
+				console.debug(`Pruning ${output.recipeDefs[key].prettyName || key} (dead-end)`)
+
+				delete output.recipeDefs[key]
+			})
 		}
 	})
 

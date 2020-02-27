@@ -7,6 +7,9 @@ script:
 
 deploy:
   - provider: releases
+    tag_name: "CI"
     api_key: "$GITHUB_TOKEN"
-    file: "reindex_dist/database.json"
+    file: 
+    - "reindex_dist/database.json"
+    - "reindex_dist/database.min.json"
     skip_cleanup: true

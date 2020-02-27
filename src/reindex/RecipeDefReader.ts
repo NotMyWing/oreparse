@@ -3,17 +3,19 @@ import { RecipeDatabase } from "../common/RecipeDatabase"
 import { MachineDef } from "../common/MachineDef"
 import { OreFilter } from "../config"
 import { prettifyName } from "../common/Util"
-import { RecipeEntryDef, ProductCollection } from "../common/RecipeDef"
+import { RecipeEntryDef, ProductCollection, ProductDef } from "../common/RecipeDef"
 
 const REG_RECIPEDEF_BEGIN = /\/\/ BEGIN (.+)/
 const REG_RECIPEDEF_FINISH = /\/\/ FINISH (.+)/
 const REG_RECIPEDEF_IN = /IN (.+)/
 const REG_RECIPEDEF_OUT = /OUT (.+)/
+const REG_RECIPEDEF_EUT = /EUT (\d+)/
 const REG_RECIPEDEF_DIV = /---/
 
 interface TempRecipeEntry {
 	input?: string;
 	outputs?: Set<string>;
+	EUt?: number;
 }
 
 interface RecipeEntryTuple {
@@ -26,7 +28,7 @@ export class RecipeDefReader implements Reader {
 	recipeDatabase: RecipeDatabase;
 
 	currentMachine: string | null;
-	currentMachineDef: MachineDef;
+	currentMachineDef: MachineDef | null;
 	
 	tempRecipeDef: TempRecipeEntry | null;
 
@@ -39,16 +41,27 @@ export class RecipeDefReader implements Reader {
 	/**
 	 * Finalizes the recipe.
 	 */
-	private finalizeRecipe(input: string, outputs: string[]): void {
-		if (!this.currentMachine) {
+	private finalizeRecipe(input: string, outputs: string[], EUt?: number): void {
+		if (!this.currentMachine || !this.currentMachineDef) {
 			throw new Error("Invalid finalizeRecipe() call, not reading a RecipeDef.")
 		}
 
 		// Create database entries for outputs
 		const definitions: (RecipeEntryTuple | undefined)[] = [input, ...outputs].map(item => {
 			if (this.blacklistMemo[item]) {
-				console.log(`Skipping ${item} (memo)`)
 				return undefined
+			}
+
+			const whitelist = item == input ? this.currentMachineDef?.inputWhiteList 
+				: this.currentMachineDef?.outputWhiteList
+
+			if (whitelist) {
+				if (!whitelist.some(reg => reg.exec(item))) {
+					console.log(`Skipping ${item} (machine whitelist miss)`)
+
+					this.blacklistMemo[item] = true
+					return undefined
+				}
 			}
 
 			if (this.recipeDatabase.recipeDefs[item]) {
@@ -56,18 +69,6 @@ export class RecipeDefReader implements Reader {
 					key: item,
 					recipeEntryDef: this.recipeDatabase.recipeDefs[item]
 				} as RecipeEntryTuple
-			}
-
-			const whitelist = item == input ? this.currentMachineDef.inputWhiteList 
-				: this.currentMachineDef.outputWhiteList
-
-			if (whitelist) {
-				if (!whitelist.some(reg => reg.exec(item))) {
-					console.log(`Skipping ${item} (whitelist miss)`)
-
-					this.blacklistMemo[item] = true
-					return undefined
-				}
 			}
 
 			if (OreFilter.oreDictionaryBlackList.some(reg => reg.exec(item))) {
@@ -112,13 +113,19 @@ export class RecipeDefReader implements Reader {
 			}
 
 			outputDefs.forEach(tuple => {
-				products[tuple.key] = this.currentMachine as string
+				products[tuple.key] = {
+					machine: this.currentMachine as string
+					, EUt: EUt
+				} as ProductDef
 
 				if (!tuple.recipeEntryDef.producedBy) {
 					tuple.recipeEntryDef.producedBy = {}
 				}
 
-				tuple.recipeEntryDef.producedBy[inputDef.key] = this.currentMachine as string
+				tuple.recipeEntryDef.producedBy[inputDef.key] = {
+					machine: this.currentMachine as string
+					, EUt: EUt
+				} as ProductDef
 			})
 		}
 	}
@@ -166,6 +173,19 @@ export class RecipeDefReader implements Reader {
 		}
 
 		if (this.currentMachine) {
+			// Match EUT
+			this.match = REG_RECIPEDEF_EUT.exec(line)
+			if (this.match) {
+				if (!this.tempRecipeDef) {
+					this.tempRecipeDef = {}
+				}
+
+				this.tempRecipeDef.EUt = Number(this.match[1])
+
+				this.match = null
+				return true // Continue Reading
+			}
+
 			// Match IN
 			this.match = REG_RECIPEDEF_IN.exec(line)
 			if (this.match) {
@@ -203,6 +223,7 @@ export class RecipeDefReader implements Reader {
 					this.finalizeRecipe(
 						this.tempRecipeDef.input
 						, Array.from(this.tempRecipeDef.outputs.values())
+						, this.tempRecipeDef.EUt
 					)
 				}
 
@@ -223,6 +244,7 @@ export class RecipeDefReader implements Reader {
 
 				this.match = null
 				this.currentMachine = null
+				this.currentMachineDef = null
 				return false // Stop Reading
 			}
 

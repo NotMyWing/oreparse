@@ -1,4 +1,9 @@
-export interface ProductCollection { [key: string]: string }
+export interface ProductDef {
+	machine: string;
+	EUt: number;
+}
+
+export interface ProductCollection { [key: string]: ProductDef }
 
 export interface RecipeEntryDef {
 	prettyName: string;

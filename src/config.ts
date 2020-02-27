@@ -22,11 +22,8 @@ const yeetDust = (dust: string): RegExp => {
 
 export const OreFilter = {
 	oreDictionaryBlackList: [
-		/^dustStone$/ig
-		, /^dust(.+?)Magnetic$/ig
-		, /dustGalliumArsenide/ig
-		, /dustFireclay/ig
-		, /dustBrick/ig
+		/^dust(.+?)Magnetic$/ig
+		, /dyeBlue/ig
 		, ...yeetOre("Bornite")
 		, ...yeetOre("BlueTopaz")
 		, yeetDust("BlueTopaz")
@@ -38,6 +35,18 @@ export const OreFilter = {
 		, yeetDust("Amethyst")
 		, ...yeetOre("Naquadah")
 		, ...yeetOre("NaquadahEnriched")
+		, yeetDust("Endstone")
+		, yeetDust("Netherrack")
+		, yeetDust("GalliumArsenide")
+		, yeetDust("Fireclay")
+		, yeetDust("Brick")
+		, yeetDust("Stone")
+		, /Blaze/ig
+		, /Blizz/ig
+		, /Basalz/ig
+		, /Blitz/ig
+		, /EnderEye/ig
+		, /EnderPearl/ig
 	]
 
 	, oreDictionaryReplacements: new Map([
@@ -57,5 +66,6 @@ export const OreFilter = {
 		/^dustRareEarth$/
 		, /^ore/
 		, /^dustPlatinumGroupSludge$/
+		, /^shipTier/
 	]
 }
