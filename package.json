@@ -19,6 +19,6 @@
     "typescript": "^3.8.2"
   },
   "dependencies": {
-    "log4js": "^6.1.2"
+    "log4js": "^6.4.0"
   }
 }
